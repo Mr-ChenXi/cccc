@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qhit.adminuser.dao.orders.OrdersMapper">
+  <resultMap id="BaseResultMap" type="com.qhit.adminuser.pojo.Orders">
+    <id column="oid" jdbcType="INTEGER" property="oid" />
+    <result column="total" jdbcType="DOUBLE" property="total" />
+    <result column="ordertime" jdbcType="TIMESTAMP" property="ordertime" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="uid" jdbcType="INTEGER" property="uid" />
+    <result column="addr" jdbcType="VARCHAR" property="addr" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+  </resultMap>
+
+
+  <resultMap id="OPO" type="com.qhit.adminuser.pojo.Orders">
+    <id column="oid" jdbcType="INTEGER" property="oid" />
+    <result column="total" jdbcType="DOUBLE" property="total" />
+    <result column="ordertime" jdbcType="TIMESTAMP" property="ordertime" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="uid" jdbcType="INTEGER" property="uid" />
+    <result column="addr" jdbcType="VARCHAR" property="addr" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+
+    <association property="orderItem" javaType="com.qhit.adminuser.pojo.OrderItem">
+      <id column="itemid" jdbcType="INTEGER" property="itemid" />
+      <result column="count" jdbcType="INTEGER" property="count" />
+      <result column="subtotal" jdbcType="DOUBLE" property="subtotal" />
+      <result column="pid" jdbcType="INTEGER" property="pid" />
+      <result column="oid" jdbcType="INTEGER" property="oid" />
+    </association>
+
+    <association property="product" javaType="com.qhit.adminuser.pojo.Product">
+      <id column="pid" jdbcType="INTEGER" property="pid" />
+      <result column="pname" jdbcType="VARCHAR" property="pname" />
+      <result column="marketprice" jdbcType="DOUBLE" property="marketprice" />
+      <result column="shopprice" jdbcType="DOUBLE" property="shopprice" />
+      <result column="image" jdbcType="VARCHAR" property="image" />
+      <result column="pdesc" jdbcType="VARCHAR" property="pdesc" />
+      <result column="ishot" jdbcType="INTEGER" property="ishot" />
+      <result column="pdate" jdbcType="TIMESTAMP" property="pdate" />
+      <result column="csid" jdbcType="INTEGER" property="csid" />
+
+    </association>
+  </resultMap>
+
+
+
+  <sql id="Base_Column_List">
+    oid, total, ordertime, state, uid, addr, phone, name
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from orders
+    where oid = #{oid,jdbcType=INTEGER}
+  </select>
+  <select id="findAll" resultMap="OPO">
+    select
+    o.oid,  o.total,  o.ordertime,  o.state,  o.uid,  o.addr,  o.phone,  o.name,
+    p.pid, p.pname, p.marketprice, p.shopprice, p.image, p.pdesc, p.ishot, p.pdate, p.csid,
+    oi.itemid, oi.count, oi.subtotal, oi.pid, oi.oid
+    from orders o,product p,orderitem oi
+    WHERE o.oid=oi.oid AND oi.pid=p.pid;
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from orders
+    where oid = #{oid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.qhit.adminuser.pojo.Orders">
+    insert into orders (oid, total, ordertime, 
+      state, uid, addr, phone, 
+      name)
+    values (#{oid,jdbcType=INTEGER}, #{total,jdbcType=DOUBLE}, #{ordertime,jdbcType=TIMESTAMP}, 
+      #{state,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER}, #{addr,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.qhit.adminuser.pojo.Orders">
+    insert into orders
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="oid != null">
+        oid,
+      </if>
+      <if test="total != null">
+        total,
+      </if>
+      <if test="ordertime != null">
+        ordertime,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="uid != null">
+        uid,
+      </if>
+      <if test="addr != null">
+        addr,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="oid != null">
+        #{oid,jdbcType=INTEGER},
+      </if>
+      <if test="total != null">
+        #{total,jdbcType=DOUBLE},
+      </if>
+      <if test="ordertime != null">
+        #{ordertime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="uid != null">
+        #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="addr != null">
+        #{addr,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qhit.adminuser.pojo.Orders">
+    update orders
+    <set>
+      <if test="total != null">
+        total = #{total,jdbcType=DOUBLE},
+      </if>
+      <if test="ordertime != null">
+        ordertime = #{ordertime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="uid != null">
+        uid = #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="addr != null">
+        addr = #{addr,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where oid = #{oid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qhit.adminuser.pojo.Orders">
+    update orders
+    set total = #{total,jdbcType=DOUBLE},
+      ordertime = #{ordertime,jdbcType=TIMESTAMP},
+      state = #{state,jdbcType=INTEGER},
+      uid = #{uid,jdbcType=INTEGER},
+      addr = #{addr,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR}
+    where oid = #{oid,jdbcType=INTEGER}
+  </update>
+</mapper>
