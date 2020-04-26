@@ -6,9 +6,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yhnet.crm.facebook.admin.entity.Article;
-import com.yhnet.crm.facebook.admin.entity.SysConfig;
 import com.yhnet.crm.facebook.admin.service.IArticleService;
-import com.yhnet.crm.facebook.admin.service.ISysAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,8 +33,8 @@ public class ArticleController {
     public R list(@RequestParam(value = "param",required = false) String param,
                   @RequestParam(value = "current", defaultValue = "1") Integer current,
                   @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize){
-        Page<Article> page = articleService.page(new Page<>(current, pageSize), Wrappers.<Article>lambdaQuery()
-                .like(StringUtils.isNotBlank(param), Article::getTitle, param)
+        Page<Article> page = new Page<>(current, pageSize);
+        articleService.page(page,Wrappers.<Article>lambdaQuery().like(StringUtils.isNotBlank(param), Article::getTitle, param)
                 .eq(Article::getStatus,1)
                 .orderByDesc(Article::getCreateTime));
         return R.ok(page);
