@@ -1,0 +1,20 @@
+server:
+port: 8080
+# 数据源
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: TSfaPYwBwBPPip6e
+    url: jdbc:mysql://47.100.101.34:13306/facebook?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowMultiQueries=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai
+  freemarker:
+    suffix: .ftlh
+    settings:
+      recognize_standard_file_extensions: true
+# 日志
+logging:
+  file: ./logs/admin.log
+  file.max-size: 200MB
+  level:
+    com.yhnet.crm.facebook.admin.mapper: DEBUG
+
