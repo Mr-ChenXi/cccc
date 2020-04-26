@@ -44,8 +44,8 @@ public class FileController {
         fileName = UUID.randomUUID() + suffixName; // 新文件名
         File newFile = new File(Constant.WX_QR_PATH, fileName);
         FileUtils.copyInputStreamToFile(file.getInputStream(),newFile);
-//        String qrUrl = Global.getValue("server_host") + "/admin/fetch/wxqr/" + fileName;
-        String qrUrl = "http://192.168.0.125:8080" + "/admin/fetch/wxqr/" + fileName;
+        String qrUrl = Global.getValue("server_host") + "/admin/fetch/wxqr/" + fileName;
+//        String qrUrl = "http://192.168.0.125:8080" + "/admin/fetch/wxqr/" + fileName;
         return R.ok(qrUrl);
     }
 
